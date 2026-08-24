@@ -1,0 +1,18 @@
+{
+  "name": "janata-sahakari-system",
+  "version": "1.0.0",
+  "description": "Cooperative Management System for Janata Sahayogi Krishi Sahakari Sanstha Limited",
+  "main": "server/src/server.js",
+  "scripts": {
+    "server": "cd server && npm run dev",
+    "client": "cd client && npm run dev",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "seed": "cd server && npm run seed"
+  },
+  "keywords": ["cooperative", "agriculture", "nepal", "mern", "billing", "inventory"],
+  "author": "Antigravity",
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
