@@ -3,13 +3,27 @@
   "version": "1.0.0",
   "description": "Cooperative Management System for Janata Sahayogi Krishi Sahakari Sanstha Limited",
   "main": "server/src/server.js",
+  "type": "module",
+  "workspaces": [
+    "client",
+    "server"
+  ],
   "scripts": {
-    "server": "cd server && npm run dev",
-    "client": "cd client && npm run dev",
+    "build": "npm run build --workspace=client",
+    "start": "node server/src/server.js",
+    "server": "npm run dev --workspace=server",
+    "client": "npm run dev --workspace=client",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "seed": "cd server && npm run seed"
+    "seed": "npm run seed --workspace=server"
   },
-  "keywords": ["cooperative", "agriculture", "nepal", "mern", "billing", "inventory"],
+  "keywords": [
+    "cooperative",
+    "agriculture",
+    "nepal",
+    "mern",
+    "billing",
+    "inventory"
+  ],
   "author": "Antigravity",
   "license": "ISC",
   "dependencies": {

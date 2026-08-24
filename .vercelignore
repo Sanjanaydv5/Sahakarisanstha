@@ -1,0 +1,12 @@
+.git
+.github
+.agents
+.gemini
+node_modules
+client/node_modules
+server/node_modules
+.env
+.env.local
+server/.env
+client/.env
+*.log

@@ -1,23 +1,36 @@
 import mongoose from 'mongoose';
-import { MongoMemoryServer } from 'mongodb-memory-server';
 import { config } from './env.js';
 
 let mongodInstance = null;
 
 export const connectDB = async () => {
+  // Return early if already connected (important for serverless warm starts)
+  if (mongoose.connection.readyState >= 1) {
+    return;
+  }
+
+  const isServerlessOrProd = Boolean(process.env.VERCEL || process.env.NODE_ENV === 'production');
+
   try {
-    // Try connecting to provided URI with a 2-second timeout
+    // Connect to provided MongoDB URI (e.g., MongoDB Atlas in production/Vercel)
     await mongoose.connect(config.mongoUri, {
-      serverSelectionTimeoutMS: 2000
+      serverSelectionTimeoutMS: isServerlessOrProd ? 8000 : 2000
     });
-    console.log(`✅ MongoDB Connected successfully to: ${config.mongoUri}`);
+    console.log(`✅ MongoDB Connected successfully to: ${config.mongoUri.split('@')[1] || config.mongoUri}`);
   } catch (error) {
+    if (isServerlessOrProd) {
+      console.error('❌ Production MongoDB connection error:', error.message);
+      throw error;
+    }
+
+    // In local development, fallback to in-memory MongoDB if local daemon is not running
     console.log(`⚠️ Local MongoDB not detected at ${config.mongoUri}. Initializing embedded MongoDB server...`);
     try {
+      const { MongoMemoryServer } = await import('mongodb-memory-server');
       mongodInstance = await MongoMemoryServer.create({
         instance: {
           dbName: 'janata_sahakari',
-          launchTimeout: 180000 // 3 minutes timeout for binary acquisition if needed
+          launchTimeout: 180000
         }
       });
       const memoryUri = mongodInstance.getUri();
