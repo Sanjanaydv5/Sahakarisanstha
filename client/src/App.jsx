@@ -5,8 +5,16 @@ import { LanguageProvider } from './context/LanguageContext';
 import { ProtectedRoute } from './routes/ProtectedRoute';
 import { Layout } from './components/layout/Layout';
 
-// Pages
+// Public Landing Pages
+import { HomePage } from './pages/public/HomePage';
+import { AboutPage } from './pages/public/AboutPage';
+import { ServicesPage } from './pages/public/ServicesPage';
+import { ContactPage } from './pages/public/ContactPage';
+
+// Auth
 import { Login } from './pages/auth/Login';
+
+// Protected App Pages
 import { DashboardRouter } from './pages/dashboard/DashboardRouter';
 import { NewBillPage } from './pages/billing/NewBillPage';
 import { BillingPage } from './pages/billing/BillingPage';
@@ -14,7 +22,7 @@ import { BillDetailPage } from './pages/billing/BillDetailPage';
 import { SalesRegisterPage } from './pages/register/SalesRegisterPage';
 import { CustomersPage } from './pages/customers/CustomersPage';
 import { InventoryPage } from './pages/inventory/InventoryPage';
-import { ServicesPage } from './pages/services/ServicesPage';
+import { ServicesPage as AppServicesPage } from './pages/services/ServicesPage';
 import { DuesPage } from './pages/dues/DuesPage';
 import { ReportsPage } from './pages/reports/ReportsPage';
 import { LetterheadPage } from './pages/letterhead/LetterheadPage';
@@ -27,10 +35,16 @@ function App() {
       <LanguageProvider>
         <AuthProvider>
           <Routes>
-            {/* Public Route */}
+            {/* ── Public Landing Pages (no auth required) ── */}
+            <Route path="/" element={<HomePage />} />
+            <Route path="/about" element={<AboutPage />} />
+            <Route path="/services-info" element={<ServicesPage />} />
+            <Route path="/contact" element={<ContactPage />} />
+
+            {/* Auth */}
             <Route path="/login" element={<Login />} />
 
-            {/* Protected Routes inside Layout */}
+            {/* ── Protected Routes inside App Layout ── */}
             <Route element={<ProtectedRoute />}>
               <Route element={<Layout />}>
                 <Route path="/dashboard" element={<DashboardRouter />} />
@@ -39,7 +53,7 @@ function App() {
                 <Route path="/billing/:id" element={<BillDetailPage />} />
                 <Route path="/register" element={<SalesRegisterPage />} />
                 <Route path="/customers" element={<CustomersPage />} />
-                <Route path="/services" element={<ServicesPage />} />
+                <Route path="/services" element={<AppServicesPage />} />
                 <Route path="/dues" element={<DuesPage />} />
                 <Route path="/letterhead" element={<LetterheadPage />} />
 
@@ -57,7 +71,7 @@ function App() {
               </Route>
             </Route>
 
-            {/* Fallback */}
+            {/* Fallback — unknown routes go to dashboard (will redirect to login if not authed) */}
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
         </AuthProvider>
