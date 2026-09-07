@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, Sprout, LogIn } from 'lucide-react';
+import { Menu, X, LogIn } from 'lucide-react';
+import logoImg from '../../assets/logo.jpg';
 
 const NAV_LINKS = [
   { to: '/', label: 'गृहपृष्ठ', labelEn: 'Home' },
@@ -34,8 +35,8 @@ export const PublicNavbar = () => {
       <div className="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform">
-            <Sprout className="w-5 h-5 text-white" />
+          <div className="w-9 h-9 rounded-xl overflow-hidden shadow-lg shadow-emerald-500/30 group-hover:scale-110 transition-transform bg-white">
+            <img src={logoImg} alt="जनता सहयोगी कृषि सहकारी" className="w-full h-full object-contain" />
           </div>
           <div className="leading-none">
             <p className="text-white font-extrabold text-sm tracking-tight">जनता सहयोगी</p>

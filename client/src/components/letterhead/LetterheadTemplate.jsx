@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { toDevanagari, getCurrentBSDateString } from '../../utils/nepaliConverter';
 import { Printer, Download, Save, RefreshCw } from 'lucide-react';
+import logoImg from '../../assets/logo.jpg';
 
 export const LetterheadTemplate = ({ orgSettings }) => {
   const org = orgSettings || {
@@ -63,6 +64,7 @@ export const LetterheadTemplate = ({ orgSettings }) => {
 
           {/* Cooperative Emblem & Title */}
           <div className="text-center mt-3 border-b-2 border-slate-900 pb-3">
+            <img src={logoImg} alt="जनता सहयोगी" className="w-16 h-16 mx-auto mb-2 object-contain" />
             <h1 className="text-2xl md:text-3xl font-extrabold text-slate-950 tracking-tight font-devanagari">
               {org.nameNepali}
             </h1>

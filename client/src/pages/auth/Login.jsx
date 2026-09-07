@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { Lock, User, ShieldCheck, ArrowRight, Sparkles, CheckCircle2, AlertCircle } from 'lucide-react';
+import logoImg from '../../assets/logo.jpg';
 
 export const Login = () => {
   const [loginId, setLoginId] = useState('');
@@ -70,8 +71,8 @@ export const Login = () => {
       <div className="w-full max-w-md bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/20 p-8 z-10 space-y-6">
         {/* Cooperative Emblem & Heading */}
         <div className="text-center space-y-2">
-          <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 mx-auto flex items-center justify-center text-white text-3xl shadow-lg shadow-emerald-500/30">
-            🌱
+          <div className="w-16 h-16 rounded-2xl overflow-hidden mx-auto shadow-lg shadow-emerald-500/30 bg-white border border-slate-100">
+            <img src={logoImg} alt="जनता सहयोगी कृषि सहकारी" className="w-full h-full object-contain" />
           </div>
           <h2 className="text-xl font-extrabold text-slate-900 leading-tight">
             {t('orgName')}

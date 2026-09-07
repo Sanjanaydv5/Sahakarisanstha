@@ -12,6 +12,7 @@ import {
   ShieldAlert,
   ChevronDown
 } from 'lucide-react';
+import logoImg from '../../assets/logo.jpg';
 
 export const Navbar = ({ onChangePasswordClick }) => {
   const { user, logout } = useAuth();
@@ -35,8 +36,8 @@ export const Navbar = ({ onChangePasswordClick }) => {
         <div className="flex items-center justify-between h-16">
           {/* Org Name & Location Header */}
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 to-teal-700 flex items-center justify-center text-white font-bold shadow-md shadow-emerald-500/20">
-              🌱
+            <div className="w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-emerald-500/20 flex-shrink-0 bg-white">
+              <img src={logoImg} alt="जनता सहयोगी कृषि सहकारी" className="w-full h-full object-contain" />
             </div>
             <div>
               <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight leading-none">

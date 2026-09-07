@@ -1,5 +1,6 @@
 import React from 'react';
-import { Sprout, Phone, MapPin, Facebook, Mail } from 'lucide-react';
+import { Phone, MapPin, Facebook, Mail } from 'lucide-react';
+import logoImg from '../../assets/logo.jpg';
 import { Link } from 'react-router-dom';
 
 export const PublicFooter = () => (
@@ -8,8 +9,8 @@ export const PublicFooter = () => (
       {/* Brand */}
       <div className="space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center">
-            <Sprout className="w-5 h-5 text-white" />
+          <div className="w-10 h-10 rounded-xl overflow-hidden bg-white">
+            <img src={logoImg} alt="जनता सहयोगी कृषि सहकारी" className="w-full h-full object-contain" />
           </div>
           <div>
             <p className="text-white font-extrabold text-sm">जनता सहयोगी कृषि सहकारी</p>
