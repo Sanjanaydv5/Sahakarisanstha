@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Menu, X, LogIn } from 'lucide-react';
+import { Menu, X, LogIn, Download } from 'lucide-react';
+import { usePWA } from '../../context/PWAContext';
 import logoImg from '../../assets/logo.jpg';
 
 const NAV_LINKS = [
@@ -13,6 +14,7 @@ const NAV_LINKS = [
 export const PublicNavbar = () => {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { installApp, isInstalled } = usePWA();
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -65,8 +67,19 @@ export const PublicNavbar = () => {
           })}
         </nav>
 
-        {/* Login CTA */}
+        {/* Actions: Install App & Login CTA */}
         <div className="hidden md:flex items-center gap-3">
+          {!isInstalled && (
+            <button
+              onClick={installApp}
+              className="flex items-center gap-1.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-semibold text-xs px-3.5 py-2.5 rounded-xl transition hover:scale-105 active:scale-95 cursor-pointer"
+              title="सहकारी मोबाइल एप इन्स्टल गर्नुहोस्"
+            >
+              <Download className="w-3.5 h-3.5 text-emerald-400" />
+              एप इन्स्टल (App)
+            </button>
+          )}
+
           <button
             onClick={() => navigate('/login')}
             className="flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 active:scale-95"
@@ -103,6 +116,17 @@ export const PublicNavbar = () => {
               </Link>
             );
           })}
+
+          {!isInstalled && (
+            <button
+              onClick={installApp}
+              className="w-full mt-2 flex items-center justify-center gap-2 bg-white/10 border border-white/20 text-white font-semibold text-sm px-5 py-3 rounded-xl transition"
+            >
+              <Download className="w-4 h-4 text-emerald-400" />
+              सहकारी एप इन्स्टल (Install App)
+            </button>
+          )}
+
           <button
             onClick={() => navigate('/login')}
             className="w-full mt-2 flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-500 text-white font-bold text-sm px-5 py-3 rounded-xl shadow-lg transition"

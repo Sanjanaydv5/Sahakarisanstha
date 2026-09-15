@@ -28,13 +28,17 @@ import { ReportsPage } from './pages/reports/ReportsPage';
 import { LetterheadPage } from './pages/letterhead/LetterheadPage';
 import { UserManagementPage } from './pages/users/UserManagementPage';
 import { SettingsPage } from './pages/settings/SettingsPage';
+import { PWAInstallBanner } from './components/common/PWAInstallBanner';
+import { PWAProvider } from './context/PWAContext';
 
 function App() {
   return (
     <BrowserRouter>
       <LanguageProvider>
         <AuthProvider>
-          <Routes>
+          <PWAProvider>
+            <PWAInstallBanner />
+            <Routes>
             {/* ── Public Landing Pages (no auth required) ── */}
             <Route path="/" element={<HomePage />} />
             <Route path="/about" element={<AboutPage />} />
@@ -74,6 +78,7 @@ function App() {
             {/* Fallback — unknown routes go to dashboard (will redirect to login if not authed) */}
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>
+          </PWAProvider>
         </AuthProvider>
       </LanguageProvider>
     </BrowserRouter>
