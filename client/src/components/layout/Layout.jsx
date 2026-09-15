@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import { Navbar } from './Navbar';
 import { Sidebar } from './Sidebar';
 import { useAuth } from '../../context/AuthContext';
@@ -9,10 +9,20 @@ import { KeyRound } from 'lucide-react';
 export const Layout = () => {
   const { user } = useAuth();
   const [showPasswordModal, setShowPasswordModal] = useState(false);
+  const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const location = useLocation();
+
+  // Auto-close mobile sidebar whenever route changes
+  useEffect(() => {
+    setMobileSidebarOpen(false);
+  }, [location.pathname]);
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-100">
-      <Navbar onChangePasswordClick={() => setShowPasswordModal(true)} />
+      <Navbar
+        onChangePasswordClick={() => setShowPasswordModal(true)}
+        onToggleMobileSidebar={() => setMobileSidebarOpen(prev => !prev)}
+      />
 
       {/* Mandatory / First-time login banner */}
       {user?.mustChangePassword && (
@@ -33,7 +43,10 @@ export const Layout = () => {
       )}
 
       <div className="flex-1 flex">
-        <Sidebar />
+        <Sidebar
+          mobileOpen={mobileSidebarOpen}
+          onClose={() => setMobileSidebarOpen(false)}
+        />
         <main className="flex-1 p-4 sm:p-6 lg:p-8 overflow-y-auto max-w-7xl mx-auto w-full">
           <Outlet />
         </main>
