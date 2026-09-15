@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { toDevanagari, getCurrentBSDateString } from '../../utils/nepaliConverter';
@@ -10,11 +11,12 @@ import {
   Calendar,
   Phone,
   ShieldAlert,
-  ChevronDown
+  ChevronDown,
+  Menu
 } from 'lucide-react';
 import logoImg from '../../assets/logo.jpg';
 
-export const Navbar = ({ onChangePasswordClick }) => {
+export const Navbar = ({ onChangePasswordClick, onToggleMobileSidebar }) => {
   const { user, logout } = useAuth();
   const { lang, toggleLanguage, t } = useLanguage();
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
@@ -22,39 +24,56 @@ export const Navbar = ({ onChangePasswordClick }) => {
   const getRoleBadge = (role) => {
     switch (role) {
       case 'admin':
-        return <span className="bg-purple-100 text-purple-800 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-purple-300">Admin</span>;
+        return <span className="bg-purple-100 text-purple-800 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full border border-purple-300">Admin</span>;
       case 'manager':
-        return <span className="bg-blue-100 text-blue-800 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-blue-300">Manager</span>;
+        return <span className="bg-blue-100 text-blue-800 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full border border-blue-300">Manager</span>;
       default:
-        return <span className="bg-emerald-100 text-emerald-800 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-emerald-300">Staff</span>;
+        return <span className="bg-emerald-100 text-emerald-800 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full border border-emerald-300">Staff</span>;
     }
   };
 
   return (
-    <header className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-sm no-print">
-      <div className="px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Org Name & Location Header */}
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-xl overflow-hidden shadow-md shadow-emerald-500/20 flex-shrink-0 bg-white">
-              <img src={logoImg} alt="जनता सहयोगी कृषि सहकारी" className="w-full h-full object-contain" />
-            </div>
-            <div>
-              <h1 className="text-base sm:text-lg font-bold text-slate-900 tracking-tight leading-none">
-                {t('orgName')}
-              </h1>
-              <p className="text-xs text-slate-500 font-medium mt-0.5 flex items-center gap-2">
-                <span>{t('orgSubtitle')}</span>
-                <span className="hidden md:inline text-slate-300">•</span>
-                <span className="hidden md:inline font-mono">{t('panNo')}</span>
-              </p>
-            </div>
+    <header className="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs no-print">
+      <div className="px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 gap-2 sm:gap-4">
+          {/* Left: Mobile hamburger + Org Logo & Location Header */}
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            {/* Hamburger Button for Mobile / Tablet */}
+            <button
+              onClick={onToggleMobileSidebar}
+              className="lg:hidden p-2 -ml-1.5 text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-xl transition flex-shrink-0"
+              aria-label="Toggle Navigation Menu"
+              title="मेनु खोल्नुहोस्"
+            >
+              <Menu className="w-5 h-5" />
+            </button>
+
+            {/* Logo & Title wrapped in Link to Home page */}
+            <Link
+              to="/"
+              className="flex items-center gap-2.5 sm:gap-3 group hover:opacity-90 transition min-w-0"
+              title="गृहपृष्ठमा जानुहोस् (Go to Home Page)"
+            >
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl overflow-hidden shadow-md shadow-emerald-500/20 flex-shrink-0 bg-white border border-slate-100">
+                <img src={logoImg} alt="जनता सहयोगी कृषि सहकारी" className="w-full h-full object-contain" />
+              </div>
+              <div className="min-w-0">
+                <h1 className="text-sm sm:text-base lg:text-lg font-bold text-slate-900 tracking-tight leading-tight truncate">
+                  {t('orgName')}
+                </h1>
+                <p className="text-[10px] sm:text-xs text-slate-500 font-medium mt-0.5 flex items-center gap-1.5 truncate">
+                  <span className="truncate">{t('orgSubtitle')}</span>
+                  <span className="hidden md:inline text-slate-300">•</span>
+                  <span className="hidden md:inline font-mono">{t('panNo')}</span>
+                </p>
+              </div>
+            </Link>
           </div>
 
           {/* Right Action Icons: Nepali Date, Language Toggle, User Profile */}
-          <div className="flex items-center space-x-3 sm:space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4 flex-shrink-0">
             {/* Nepali Date Badge */}
-            <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium">
+            <div className="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium">
               <Calendar className="w-3.5 h-3.5 text-emerald-600" />
               <span>मिति: <strong>{getCurrentBSDateString()} (B.S.)</strong></span>
             </div>
