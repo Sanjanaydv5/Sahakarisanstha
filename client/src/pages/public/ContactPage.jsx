@@ -9,7 +9,7 @@ const INFO_CARDS = [
     color: 'text-emerald-400 bg-emerald-500/10 border-emerald-500/20',
     title: 'कार्यालय ठेगाना',
     titleEn: 'Office Address',
-    lines: ['लोहारपट्टी-२, मधेपुरा (महोत्तरी)', 'बागमती प्रदेश, नेपाल', 'Loharpatti-2, Madhepura, Mahottari'],
+    lines: ['लोहारपट्टी-२, मधेपुरा (महोत्तरी)', 'मधेस प्रदेश, नेपाल', 'Loharpatti-2, Madhepura, Mahottari'],
   },
   {
     icon: Phone,

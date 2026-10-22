@@ -49,12 +49,12 @@ export const seedDatabase = async () => {
       }
     });
 
-    // 2. Seed Default Users
+    // 2. Seed Default Users with Role-based Credentials
     const adminUser = await User.create({
-      name: 'प्रशासक (Admin)',
-      username: 'admin',
+      name: 'प्रशासक (Chief Administrator)',
+      username: 'sahakari_admin',
       email: 'admin@janatasahakari.org',
-      password: 'Admin@123',
+      password: 'Admin@Sahakari#2026!',
       role: 'admin',
       phone: '9844111621',
       isActive: true,
@@ -62,10 +62,10 @@ export const seedDatabase = async () => {
     });
 
     const managerUser = await User.create({
-      name: 'सहकारी व्यवस्थापक (Manager)',
-      username: 'manager',
+      name: 'सहकारी व्यवस्थापक (General Manager)',
+      username: 'sahakari_manager',
       email: 'manager@janatasahakari.org',
-      password: 'Manager@123',
+      password: 'Manager@Sahakari#2026!',
       role: 'manager',
       phone: '9814850746',
       isActive: true,
@@ -73,10 +73,10 @@ export const seedDatabase = async () => {
     });
 
     const staffUser = await User.create({
-      name: 'लेखापाल / काउन्टर कर्मचारी (Staff)',
-      username: 'staff',
+      name: 'लेखापाल तथा काउन्टर (Counter Cashier & Staff)',
+      username: 'sahakari_staff',
       email: 'staff@janatasahakari.org',
-      password: 'Staff@123',
+      password: 'Staff@Sahakari#2026!',
       role: 'staff',
       phone: '9800000000',
       isActive: true,

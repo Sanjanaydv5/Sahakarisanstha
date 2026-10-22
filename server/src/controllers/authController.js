@@ -12,55 +12,112 @@ export const login = async (req, res) => {
     if (!loginId || !password) {
       return res.status(400).json({
         success: false,
-        message: 'Please provide email/username and password'
+        message: 'कृपया युजरनेम वा ईमेल र पासवर्ड प्रविष्ट गर्नुहोस् । (Please provide username/email and password)'
       });
     }
 
+    const cleanLoginId = loginId.toLowerCase().trim();
+
+    // Map common aliases (e.g. sahakari_admin <-> admin, etc.)
+    const queryConditions = [
+      { email: cleanLoginId },
+      { username: cleanLoginId }
+    ];
+    if (cleanLoginId === 'admin') queryConditions.push({ username: 'sahakari_admin' });
+    if (cleanLoginId === 'manager') queryConditions.push({ username: 'sahakari_manager' });
+    if (cleanLoginId === 'staff') queryConditions.push({ username: 'sahakari_staff' });
+    if (cleanLoginId === 'sahakari_admin') queryConditions.push({ username: 'admin' });
+    if (cleanLoginId === 'sahakari_manager') queryConditions.push({ username: 'manager' });
+    if (cleanLoginId === 'sahakari_staff') queryConditions.push({ username: 'staff' });
+
     // Check by email or username
     const user = await User.findOne({
-      $or: [
-        { email: loginId.toLowerCase().trim() },
-        { username: loginId.toLowerCase().trim() }
-      ]
+      $or: queryConditions
     }).select('+password');
 
+    // Generic error message to prevent username enumeration by outsiders
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: 'Invalid credentials. User not found.'
+        message: 'लगइन विवरण मिलेन । कृपया युजरनेम र पासवर्ड जाँच गर्नुहोस् । (Invalid username or password)'
+      });
+    }
+
+    // Check account lockout
+    if (user.lockUntil && user.lockUntil > new Date()) {
+      const minutesRemaining = Math.ceil((user.lockUntil - new Date()) / (60 * 1000));
+      return res.status(423).json({
+        success: false,
+        message: `सुरक्षा सतर्कता: लगातार धेरै पटक गलत पासवर्ड प्रविष्ट भएकाले खाता अस्थायी रूपमा लक गरिएको छ । कृपया ${minutesRemaining} मिनेटपछि प्रयास गर्नुहोस् । (Account locked due to multiple failed attempts)`
       });
     }
 
     if (!user.isActive) {
       return res.status(403).json({
         success: false,
-        message: 'Your account is deactivated. Please contact administration.'
+        message: 'तपाईंको खाता निष्क्रिय गरिएको छ । कृपया मुख्य प्रशासनमा सम्पर्क गर्नुहोस् । (Account deactivated)'
       });
     }
 
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
+      // Increment failed attempts
+      user.failedLoginAttempts = (user.failedLoginAttempts || 0) + 1;
+      
+      // Lock for 15 minutes after 5 consecutive failures
+      let isLockedNow = false;
+      if (user.failedLoginAttempts >= 5) {
+        user.lockUntil = new Date(Date.now() + 15 * 60 * 1000);
+        isLockedNow = true;
+      }
+      await user.save({ validateBeforeSave: false });
+
+      const clientIp = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+      await AuditLog.create({
+        action: 'LOGIN_FAILED',
+        module: 'AUTH',
+        targetId: user._id.toString(),
+        details: {
+          username: user.username,
+          role: user.role,
+          failedAttempts: user.failedLoginAttempts,
+          ip: clientIp
+        }
+      });
+
+      const remainingAttempts = Math.max(0, 5 - user.failedLoginAttempts);
+      const warningText = isLockedNow
+        ? '५ पटक गलत पासवर्ड भएकाले खाता १५ मिनेटका लागि लक भयो । (Account locked for 15 minutes)'
+        : `${remainingAttempts} प्रयास बाँकी छ । (${remainingAttempts} attempts remaining)`;
+
       return res.status(401).json({
         success: false,
-        message: 'Invalid password. Please check your credentials.'
+        message: `गलत पासवर्ड । ${warningText}`
       });
     }
 
-    // Update last login
+    // Successful login: reset failed counters
+    user.failedLoginAttempts = 0;
+    user.lockUntil = null;
     user.lastLogin = new Date();
     await user.save({ validateBeforeSave: false });
 
-    // Generate tokens
+    // Generate secure tokens
     const token = generateToken(user._id);
     const refreshToken = generateRefreshToken(user._id);
 
     // Audit log
+    const clientIp = req.ip || req.headers['x-forwarded-for'] || req.socket.remoteAddress;
     await AuditLog.create({
       action: 'USER_LOGIN',
       module: 'AUTH',
       targetId: user._id.toString(),
       performedBy: user._id,
-      details: { username: user.username, role: user.role }
+      details: {
+        username: user.username,
+        role: user.role,
+        ip: clientIp
+      }
     });
 
     res.json({

@@ -40,6 +40,13 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
+  failedLoginAttempts: {
+    type: Number,
+    default: 0
+  },
+  lockUntil: {
+    type: Date
+  },
   mustChangePassword: {
     type: Boolean,
     default: false
@@ -51,12 +58,12 @@ const userSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// Hash password before saving
+// Hash password before saving with 12 salt rounds
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
   }
-  const salt = await bcrypt.genSalt(10);
+  const salt = await bcrypt.genSalt(12);
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
