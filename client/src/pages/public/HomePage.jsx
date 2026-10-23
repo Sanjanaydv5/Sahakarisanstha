@@ -6,6 +6,8 @@ import {
 } from 'lucide-react';
 import { PublicNavbar } from '../../components/public/PublicNavbar';
 import { PublicFooter } from '../../components/public/PublicFooter';
+import { LiveDemoSection } from '../../components/public/LiveDemoSection';
+import { Play } from 'lucide-react';
 
 const STATS = [
   { value: '२०६७', label: 'स्थापना वर्ष', labelEn: 'Est. Year', icon: Award },
@@ -132,11 +134,18 @@ export const HomePage = () => {
               प्रणालीमा प्रवेश गर्नुहोस्
               <ArrowRight className="w-5 h-5" />
             </button>
+            <a
+              href="#demo"
+              className="flex items-center gap-2 text-emerald-300 hover:text-white font-semibold text-base px-6 py-4 rounded-2xl bg-emerald-500/10 hover:bg-emerald-500/20 border border-emerald-500/30 transition-all hover:scale-105"
+            >
+              <Play className="w-4 h-4 fill-emerald-400 text-emerald-400" />
+              प्रत्यक्ष डेमो हेर्नुहोस् (Live Demo)
+            </a>
             <Link
               to="/about"
               className="flex items-center gap-2 text-white/70 hover:text-white font-semibold text-base px-6 py-4 rounded-2xl border border-white/10 hover:border-white/30 hover:bg-white/5 transition-all"
             >
-              हाम्रोबारे जान्नुहोस् <ChevronRight className="w-4 h-4" />
+              हाम्रोबारे <ChevronRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -164,6 +173,9 @@ export const HomePage = () => {
           ))}
         </div>
       </section>
+
+      {/* ── Interactive Live System Demo ── */}
+      <LiveDemoSection />
 
       {/* ── Features ── */}
       <section className="py-24 px-6">

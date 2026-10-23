@@ -70,6 +70,7 @@ app.get('/api/health', (req, res) => {
 });
 
 // API Routes
+app.use('/api/demo-assets', express.static('C:/Users/Win11/.gemini/antigravity-ide/brain/915f0ab7-b68c-44fe-8f85-1575b48563fa'));
 app.use('/api/auth', authLimiter, authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/settings', settingsRoutes);

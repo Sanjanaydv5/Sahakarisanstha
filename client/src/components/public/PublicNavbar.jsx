@@ -6,6 +6,7 @@ import logoImg from '../../assets/logo.jpg';
 
 const NAV_LINKS = [
   { to: '/', label: 'गृहपृष्ठ', labelEn: 'Home' },
+  { to: '/#demo', label: 'प्रणाली डेमो', labelEn: 'Live Demo' },
   { to: '/about', label: 'हाम्रोबारे', labelEn: 'About' },
   { to: '/services', label: 'सेवाहरू', labelEn: 'Services' },
   { to: '/contact', label: 'सम्पर्क', labelEn: 'Contact' },
